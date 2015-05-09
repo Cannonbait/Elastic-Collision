@@ -10,10 +10,11 @@ public class Main {
     frame.setLayout(new GridLayout(1, 1));
     frame.add(appletClass);
     frame.setMinimumSize(new Dimension(400, 400));
+    
+    frame.setVisible(true);
 
     appletClass.init();
     appletClass.start();
 
-    frame.setVisible(true);
 	}
 }
