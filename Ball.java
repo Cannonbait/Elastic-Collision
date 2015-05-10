@@ -1,5 +1,5 @@
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,6 +10,7 @@ import java.util.List;
 public class Ball {
   private double x, y, vx, vy, r;
   private boolean gravity = true;
+  private List<Ball> collisions = new ArrayList<>();
 
   
   public Ball(double x, double y) {
@@ -26,6 +27,18 @@ public class Ball {
     double yDiff = getY()-ball.getY();
     double distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
     return (distance < getR() + ball.getR());
+  }
+
+  public void addCollision(Ball ball){
+    collisions.add(ball);
+  }
+
+  public boolean hasNotCollidedWith(Ball ball){
+    return !collisions.contains(ball);
+  }
+
+  public void emptyCollisions(){
+    collisions.clear();
   }
 
   
@@ -48,10 +61,9 @@ public class Ball {
   public void setGravity(boolean value){
     gravity = value;
   }
-  
-  public void setMovementVector(Vector v){
-    vx = v.getX();
-    vy = v.getY();
+
+  public double getMomentum(){
+    return getMass() * vx + getMass() * vy;
   }
   
   public double getMass(){
