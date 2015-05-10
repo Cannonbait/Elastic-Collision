@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Ball {
   private double x, y, vx, vy, r;
-  private boolean activeGravity = true;
+  private boolean gravity = true;
 
   
   public Ball(double x, double y) {
@@ -39,14 +39,14 @@ public class Ball {
     y += dir.getY();
   }
 
-  public void applyGravity(double gravity){
-    if (activeGravity){
-      vy -= gravity;
+  public void applyGravity(double constant){
+    if (gravity){
+      vy -= constant;
     }
   }
 
-  public void setNoGravity(){
-    activeGravity = false;
+  public void setGravity(boolean value){
+    gravity = value;
   }
   
   public void setMovementVector(Vector v){

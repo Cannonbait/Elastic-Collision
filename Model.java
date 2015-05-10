@@ -62,7 +62,9 @@ public class Model implements IBouncingBallsModel {
       }
       if (y < r || y > areaHeight - r) {
         ball.setVy(ball.getVy() * -1);
-        ball.setNoGravity();
+        ball.setGravity(false);
+      } else {
+        ball.setGravity(true);
       }
     }
   }
