@@ -13,9 +13,10 @@ public class Model implements IBouncingBallsModel {
 	public Model(double width, double height) {
 		this.areaWidth = width;
 		this.areaHeight = height;
-		balls.add(new Ball(1, 5));
-    balls.add(new Ball(1, 2));
-	}
+		balls.add(new Ball(1.1, 5));
+    balls.add(new Ball(3, 6));
+    balls.add(new Ball(5.1, 6));
+  }
 
 	@Override
 	public void tick(double deltaT) {
@@ -26,9 +27,27 @@ public class Model implements IBouncingBallsModel {
 
     moveBalls(deltaT);
 
+    checkIfStuckInside();
+
     clearCollisions();
-		
+
 	}
+
+  private void checkIfStuckInside(){
+    for (Ball a : balls){
+      for (Ball b : balls){
+        if (a != b && a.collidesWith(b) && !a.hasNotCollidedWith(b)){
+          System.out.println(a);
+          System.out.println(b);
+
+
+          while (true){
+
+          }
+        }
+      }
+    }
+  }
 
   private void clearCollisions(){
     for (Ball ball : balls){
@@ -37,8 +56,8 @@ public class Model implements IBouncingBallsModel {
   }
 
   private void handleCollisions(double deltaT){
-    ballCollisions(deltaT);
     wallCollisions(deltaT);
+    ballCollisions(deltaT);
 
   }
 
@@ -72,7 +91,6 @@ public class Model implements IBouncingBallsModel {
     Vector newAp = bP;
     Vector newAVectorVx = newAp.projection(xNorm).add(aR.projection(xNorm));
     Vector newAVectorVy = newAp.projection(yNorm).add(aR.projection(yNorm));
-    System.out.println("From: " + a.getVy() + "\t To: " + newAVectorVy.getY());
     a.setVx(newAVectorVx.getX());
     a.setVy(newAVectorVy.getY());
     
@@ -80,7 +98,6 @@ public class Model implements IBouncingBallsModel {
     Vector newBp = aP;
     Vector newBVectorVx = newBp.projection(xNorm).add(bR.projection(xNorm));
     Vector newBVectorVy = newBp.projection(yNorm).add(bR.projection(yNorm));
-    System.out.println("From: " + b.getVy() + "\t To: " + newBVectorVy.getY());
     b.setVx(newBVectorVx.getX());
     b.setVy(newBVectorVy.getY());
   }
@@ -94,11 +111,11 @@ public class Model implements IBouncingBallsModel {
   private void wallCollisions(double deltaT){
     for (Ball ball : balls){
       double x = ball.getX(), y = ball.getY(), r = ball.getR();
-      if (x < r || x > areaWidth - r) {
+      if ((x < r && ball.getVx() < 0) || (x > areaWidth - r && ball.getVx() > 0)) {
         ball.setVx(ball.getVx() * -1);
 
       }
-      if (y < r || y > areaHeight - r) {
+      if ((y < r && ball.getVy() < 0) || (y > areaHeight - r && ball.getVy() > 0)) {
         ball.setVy(ball.getVy() * -1);
         ball.setGravity(false);
       } else {

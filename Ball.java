@@ -70,6 +70,10 @@ public class Ball {
     return 1;
     //return r*r*Math.PI;
   }
+
+  public String toString(){
+    return x + ", " + y + "\t" + vx + ", " + vy;
+  }
   
   public Vector getMovementVector(){
     return new Vector(vx, vy);
