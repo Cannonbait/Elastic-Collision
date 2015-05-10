@@ -37,8 +37,10 @@ public class Ball {
     return !collisions.contains(ball);
   }
 
-  public void emptyCollisions(){
-    collisions.clear();
+  public void removeCollision(Ball b){
+    if (collisions.contains(b)){
+      collisions.remove(b);
+    }
   }
 
   
