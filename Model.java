@@ -13,9 +13,17 @@ public class Model implements IBouncingBallsModel {
 	public Model(double width, double height) {
 		this.areaWidth = width;
 		this.areaHeight = height;
-		balls.add(new Ball(1.1, 5));
-    balls.add(new Ball(3, 6));
-    balls.add(new Ball(5.1, 6));
+    for (int x = 3; x < 24; x += 3){
+      balls.add(new Ball(x, 3));
+      balls.add(new Ball(x+0.1, 6));
+      balls.add(new Ball(x+0.2, 9));
+      balls.add(new Ball(x+0.3, 12));
+      balls.add(new Ball(x+0.4, 15));
+      balls.add(new Ball(x+0.5, 18));
+      balls.add(new Ball(x+0.6, 21));
+      balls.add(new Ball(x+0.7, 24));
+      balls.add(new Ball(x+0.8, 27));
+    }
   }
 
 	@Override
@@ -27,27 +35,9 @@ public class Model implements IBouncingBallsModel {
 
     moveBalls(deltaT);
 
-    checkIfStuckInside();
-
     clearCollisions();
 
 	}
-
-  private void checkIfStuckInside(){
-    for (Ball a : balls){
-      for (Ball b : balls){
-        if (a != b && a.collidesWith(b) && !a.hasNotCollidedWith(b)){
-          System.out.println(a);
-          System.out.println(b);
-
-
-          while (true){
-
-          }
-        }
-      }
-    }
-  }
 
   private void clearCollisions(){
     for (Ball ball : balls){
@@ -111,11 +101,11 @@ public class Model implements IBouncingBallsModel {
   private void wallCollisions(double deltaT){
     for (Ball ball : balls){
       double x = ball.getX(), y = ball.getY(), r = ball.getR();
-      if ((x < r && ball.getVx() < 0) || (x > areaWidth - r && ball.getVx() > 0)) {
+      if ((x < r && ball.getVx() <= 0) || (x > areaWidth - r && ball.getVx() >= 0)) {
         ball.setVx(ball.getVx() * -1);
 
       }
-      if ((y < r && ball.getVy() < 0) || (y > areaHeight - r && ball.getVy() > 0)) {
+      if ((y < r && ball.getVy() <= 0) || (y > areaHeight - r && ball.getVy() >= 0)) {
         ball.setVy(ball.getVy() * -1);
         ball.setGravity(false);
       } else {
