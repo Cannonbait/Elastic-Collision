@@ -1,16 +1,8 @@
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-/**
- *
- * @author Cannonbait
- */
 public class Ball {
   private double x, y, vx, vy, r;
   private boolean gravity = true;
-  private List<Ball> collisions = new ArrayList<>();
 
   
   public Ball(double x, double y) {
@@ -29,21 +21,7 @@ public class Ball {
     return (distance < getR() + ball.getR());
   }
 
-  public void addCollision(Ball ball){
-    collisions.add(ball);
-  }
 
-  public boolean hasNotCollidedWith(Ball ball){
-    return !collisions.contains(ball);
-  }
-
-  public void removeCollision(Ball b){
-    if (collisions.contains(b)){
-      collisions.remove(b);
-    }
-  }
-
-  
   public void move(double deltaT){
     x += vx * deltaT;
     y += vy * deltaT;

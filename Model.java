@@ -36,17 +36,6 @@ public class Model implements IBouncingBallsModel {
     moveBalls(deltaT);
 	}
 
-  private void clearCollisions(){
-    for (Ball a : balls){
-      for (Ball b : balls){
-        if (a != b && !a.collidesWith(b)){
-          a.removeCollision(b);
-          b.removeCollision(a);
-        }
-      }
-    }
-  }
-
   private void handleCollisions(double deltaT){
     ballCollisions(deltaT);
     wallCollisions(deltaT);
@@ -56,7 +45,7 @@ public class Model implements IBouncingBallsModel {
   private void ballCollisions(double deltaT){
     for (Ball a : balls){
       for (Ball b : balls){
-        if (a != b && a.collidesWith(b)){
+        if (a != b && a.collidesWith(b) && activeCollision(a, b)){
           ballCollision(a, b);
         }
       }
@@ -80,10 +69,8 @@ public class Model implements IBouncingBallsModel {
     //Based on aP and bP we need to calculate the new vectors on the collision axis
     //final double momentum 
     
-    if (activeCollision(a, b)){
-      setMovementVectors(bP, aR, a);
-      setMovementVectors(aP, bR, b);
-    }
+    setMovementVectors(bP, aR, a);
+    setMovementVectors(aP, bR, b);
   }
 
   private boolean activeCollision(Ball a, Ball b){
