@@ -15,14 +15,14 @@ public class Model implements IBouncingBallsModel {
 		this.areaHeight = height;
     for (int x = 3; x < 24; x += 3){
       balls.add(new Ball(x, 3));
-      balls.add(new Ball(x+0.1, 6));
-      balls.add(new Ball(x+0.2, 9));
-      balls.add(new Ball(x+0.3, 12));
-      balls.add(new Ball(x+0.4, 15));
-      balls.add(new Ball(x+0.5, 18));
-      balls.add(new Ball(x+0.6, 21));
-      balls.add(new Ball(x+0.7, 24));
-      balls.add(new Ball(x+0.8, 27));
+      balls.add(new Ball(x, 6));
+      balls.add(new Ball(x, 9));
+      balls.add(new Ball(x, 12));
+      balls.add(new Ball(x, 15));
+      balls.add(new Ball(x, 18));
+      balls.add(new Ball(x, 21));
+      balls.add(new Ball(x, 24));
+      balls.add(new Ball(x, 27));
     }
   }
 
@@ -40,8 +40,13 @@ public class Model implements IBouncingBallsModel {
 	}
 
   private void clearCollisions(){
-    for (Ball ball : balls){
-      ball.emptyCollisions();
+    for (Ball a : balls){
+      for (Ball b : balls){
+        if (a != b && !a.collidesWith(b)){
+          a.removeCollision(b);
+          b.removeCollision(a);
+        }
+      }
     }
   }
 
@@ -63,8 +68,9 @@ public class Model implements IBouncingBallsModel {
     }  
   }
 
+
+
   private void ballCollision(Ball a, Ball b){
-    Vector xNorm = new Vector(1, 0), yNorm = new Vector(0, 1);
     Vector collisionVector = calculateCollisionVector(a, b);
 
     Vector aV = a.getMovementVector();
@@ -77,19 +83,21 @@ public class Model implements IBouncingBallsModel {
 
     //Based on aP and bP we need to calculate the new vectors on the collision axis
     //final double momentum 
-    
-    Vector newAp = bP;
-    Vector newAVectorVx = newAp.projection(xNorm).add(aR.projection(xNorm));
-    Vector newAVectorVy = newAp.projection(yNorm).add(aR.projection(yNorm));
-    a.setVx(newAVectorVx.getX());
-    a.setVy(newAVectorVy.getY());
-    
 
-    Vector newBp = aP;
-    Vector newBVectorVx = newBp.projection(xNorm).add(bR.projection(xNorm));
-    Vector newBVectorVy = newBp.projection(yNorm).add(bR.projection(yNorm));
-    b.setVx(newBVectorVx.getX());
-    b.setVy(newBVectorVy.getY());
+    setMovementVectors(bP, aR, a);
+    setMovementVectors(aP, bR, b);
+  }
+
+  private boolean isSeparating(Vector a, Vector b){
+    return false;
+  }
+
+  private void setMovementVectors(Vector vP, Vector vR, Ball ball){
+    Vector xNorm = new Vector(1, 0), yNorm = new Vector(0, 1);
+    Vector vectorVx = vP.projection(xNorm).add(vR.projection(xNorm));
+    Vector vectorVy = vP.projection(yNorm).add(vR.projection(yNorm));
+    ball.setVx(vectorVx.getX());
+    ball.setVy(vectorVy.getY());
   }
 
   private Vector calculateCollisionVector(Ball a, Ball b){
