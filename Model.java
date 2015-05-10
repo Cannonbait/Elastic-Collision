@@ -28,11 +28,8 @@ public class Model implements IBouncingBallsModel {
 
 	@Override
 	public void tick(double deltaT) {
-
     handleCollisions(deltaT);
-
     applyGravity(deltaT);
-
     moveBalls(deltaT);
 	}
 
@@ -57,20 +54,25 @@ public class Model implements IBouncingBallsModel {
     Vector collisionVector = calculateCollisionVector(a, b);
 
     Vector aV = a.getMovementVector();
-    Vector aP = aV.projection(collisionVector);
-    double aPL = aV.projectionLength(collisionVector);
+    double u1 = aV.projectionLength(collisionVector);
+    double m1 = a.getMass();
     Vector aR = aV.rejection(collisionVector);
 
     Vector bV = b.getMovementVector();
-    Vector bP = bV.projection(collisionVector);
-    double bPL = bV.projectionLength(collisionVector);
+    double u2 = bV.projectionLength(collisionVector);
+    double m2 = b.getMass();
     Vector bR = bV.rejection(collisionVector);
 
-    //Based on aP and bP we need to calculate the new vectors on the collision axis
-    //final double momentum 
-    
-    setMovementVectors(bP, aR, a);
-    setMovementVectors(aP, bR, b);
+    double i = u1 * m1 + u2 * m2;
+    double r = -(u2 - u1);
+    double v1 = (i - m2 * r)/(m1 + m2);
+    double v2 = r + v1;
+
+    Vector aP = new Vector(collisionVector, v1);
+    Vector bP = new Vector(collisionVector, v2);
+
+    setMovementVectors(aP, aR, a);
+    setMovementVectors(bP, bR, b);
   }
 
   private boolean activeCollision(Ball a, Ball b){

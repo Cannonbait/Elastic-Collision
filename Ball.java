@@ -7,11 +7,15 @@ public class Ball {
   
   public Ball(double x, double y) {
     //r = Math.random()*0.9+0.1;
-    r = 1.0;
+    this(x, y, Math.random(), Math.random(), Math.random()*0.9 + 0.1);
+  }
+
+  public Ball(double x, double y, double vx, double vy, double r){
     this.x = x;
     this.y = y;
-    vx = 1;
-    vy = 0;
+    this.vx = vx;
+    this.vy = vy;
+    this.r = r;
   }
   
   public boolean collidesWith(Ball ball){
@@ -47,8 +51,7 @@ public class Ball {
   }
   
   public double getMass(){
-    return 1;
-    //return r*r*Math.PI;
+    return r*r*Math.PI;
   }
 
   public String toString(){

@@ -9,9 +9,8 @@ public class Vector {
 	}
 	
 	public Vector (Vector v, double length){
-		Vector normalized = v.normalize();
-		x = normalized.getX() * length;
-		y = normalized.getY() * length;
+		x = v.getX() * length;
+		y = v.getY() * length;
 	}
 	
 	public double dotProduct(Vector b){
