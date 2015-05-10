@@ -79,6 +79,7 @@ public abstract class Animator extends JApplet {
 			try {
 				double frameStartTime = System.nanoTime();
 				animateNextFrame();
+				getToolkit().sync();
 				double currentFrameTime = System.nanoTime() - frameStartTime;
 				int timeToNextFrame = (int) ((timePerFrame - currentFrameTime) / 1000000);
 				if (timeToNextFrame > 0) {
