@@ -9,62 +9,74 @@
  * @author Cannonbait
  */
 public class Vector {
-    private final double x, y;
-    
-    public Vector (double x, double y){
-        this.x = x;
-        this.y = y;
-    }
-    
-    public Vector (Vector v, double length){
-        Vector normalized = v.normalize();
-        x = normalized.getX() * length;
-        y = normalized.getY() * length;
-    }
-    
-    public double dotProduct(Vector b){
-        return x*b.getX()+y*b.getY();
-    }
-    
-    public double getDistance(Vector b){
-        return Math.hypot(x-b.getX(), y-b.getY());
-    }
-    
-    public double getLength(){
-        return Math.hypot(x, y);
-    }
-    
-    public Vector normalize(){
-        double len = Math.hypot(x, y);
-        return new Vector(x/len, y/len);
-    }
-    
-    public Vector projection(Vector b){
-        double length = this.dotProduct(b)/b.dotProduct(b);
-        return new Vector(length*b.getX(), length*b.getY());
-    }
-    
-    public Vector rejection(Vector b){
-        return projection(new Vector(b.getY()*-1, b.getX()));
-    }
-    
-    public Vector add(Vector b){
-        return new Vector(x + b.getX(), y + b.getY());
-    }
-    
-    public Vector getReverse(){
-        return new Vector(y*-1, x);
-    }
-    
-    public String toString(){
-        return "X: " + x + "\tY: " + y;
-    }
-    
-    public double getX(){
-        return x;
-    }
-    
-    public double getY(){
-        return y;
-    }
+	private final double x, y;
+	
+	public Vector (double x, double y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	public Vector (Vector v, double length){
+		Vector normalized = v.normalize();
+		x = normalized.getX() * length;
+		y = normalized.getY() * length;
+	}
+	
+	public double dotProduct(Vector b){
+		return x*b.getX()+y*b.getY();
+	}
+	
+	public double getDistance(Vector b){
+		return Math.hypot(x-b.getX(), y-b.getY());
+	}
+	
+	public double getLength(){
+		return Math.hypot(x, y);
+	}
+
+	public boolean equalDirection(Vector b){
+    return normalize().equals(b.normalize());
+	}
+	
+	public Vector normalize(){
+		double len = Math.hypot(x, y);
+		return new Vector(x/len, y/len);
+	}
+	
+	public Vector projection(Vector b){
+		double length = this.dotProduct(b)/b.dotProduct(b);
+		return new Vector(length*b.getX(), length*b.getY());
+	}
+
+  public double projectionLength(Vector b){
+    return this.dotProduct(b)/b.dotProduct(b);
+  }
+	
+	public Vector rejection(Vector b){
+		return projection(new Vector(b.getY()*-1, b.getX()));
+	}
+	
+	public Vector add(Vector b){
+		return new Vector(x + b.getX(), y + b.getY());
+	}
+	
+	public Vector getReverse(){
+		return new Vector(y*-1, x);
+	}
+	
+	public String toString(){
+		return "X: " + x + "\tY: " + y;
+	}
+
+  public boolean equals(Vector v){
+    return x == v.getX() && y == v.getY();
+  }
+	
+	public double getX(){
+		return x;
+	}
+	
+	public double getY(){
+		return y;
+	}
 }

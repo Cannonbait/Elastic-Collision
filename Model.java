@@ -13,16 +13,16 @@ public class Model implements IBouncingBallsModel {
 	public Model(double width, double height) {
 		this.areaWidth = width;
 		this.areaHeight = height;
+    
     for (int x = 3; x < 24; x += 3){
       balls.add(new Ball(x, 3));
-      balls.add(new Ball(x, 6));
-      balls.add(new Ball(x, 9));
-      balls.add(new Ball(x, 12));
-      balls.add(new Ball(x, 15));
-      balls.add(new Ball(x, 18));
-      balls.add(new Ball(x, 21));
-      balls.add(new Ball(x, 24));
-      balls.add(new Ball(x, 27));
+      balls.add(new Ball(x + 0.1, 6));
+      balls.add(new Ball(x + 0.2, 9));
+      balls.add(new Ball(x + 0.3, 12));
+      balls.add(new Ball(x + 0.4, 15));
+      balls.add(new Ball(x + 0.5, 18));
+      balls.add(new Ball(x + 0.6, 21));
+      balls.add(new Ball(x + 0.7, 24));
     }
   }
 
@@ -34,9 +34,6 @@ public class Model implements IBouncingBallsModel {
     applyGravity(deltaT);
 
     moveBalls(deltaT);
-
-    clearCollisions();
-
 	}
 
   private void clearCollisions(){
@@ -51,17 +48,15 @@ public class Model implements IBouncingBallsModel {
   }
 
   private void handleCollisions(double deltaT){
-    wallCollisions(deltaT);
     ballCollisions(deltaT);
+    wallCollisions(deltaT);
 
   }
 
   private void ballCollisions(double deltaT){
     for (Ball a : balls){
       for (Ball b : balls){
-        if (a != b && a.collidesWith(b) && a.hasNotCollidedWith(b)){
-          a.addCollision(b);
-          b.addCollision(a);
+        if (a != b && a.collidesWith(b)){
           ballCollision(a, b);
         }
       }
@@ -69,27 +64,37 @@ public class Model implements IBouncingBallsModel {
   }
 
 
-
   private void ballCollision(Ball a, Ball b){
     Vector collisionVector = calculateCollisionVector(a, b);
 
     Vector aV = a.getMovementVector();
     Vector aP = aV.projection(collisionVector);
+    double aPL = aV.projectionLength(collisionVector);
     Vector aR = aV.rejection(collisionVector);
 
     Vector bV = b.getMovementVector();
     Vector bP = bV.projection(collisionVector);
+    double bPL = bV.projectionLength(collisionVector);
     Vector bR = bV.rejection(collisionVector);
 
     //Based on aP and bP we need to calculate the new vectors on the collision axis
     //final double momentum 
-
-    setMovementVectors(bP, aR, a);
-    setMovementVectors(aP, bR, b);
+    
+    if (activeCollision(a, b)){
+      setMovementVectors(bP, aR, a);
+      setMovementVectors(aP, bR, b);
+    }
   }
 
-  private boolean isSeparating(Vector a, Vector b){
-    return false;
+  private boolean activeCollision(Ball a, Ball b){
+    Vector collisionVector = calculateCollisionVector(a, b);
+    double aLength = a.getMovementVector().projectionLength(collisionVector);
+    double bLength = b.getMovementVector().projectionLength(collisionVector);
+
+    if ((aLength > 0 && bLength < 0) || bLength < aLength){
+      return false;
+    }
+    return true;
   }
 
   private void setMovementVectors(Vector vP, Vector vR, Ball ball){
@@ -134,9 +139,6 @@ public class Model implements IBouncingBallsModel {
     }
   }
     
-
-
-
   @Override
 	public List<Ellipse2D> getBalls() {
 		List<Ellipse2D> myBalls = new LinkedList<Ellipse2D>();
