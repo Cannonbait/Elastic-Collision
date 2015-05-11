@@ -3,6 +3,7 @@
 public class Ball {
   private double x, y, vx, vy, r;
   private boolean gravity = true;
+  private final RgbColor color;
 
   
   public Ball(double x, double y) {
@@ -16,6 +17,7 @@ public class Ball {
     this.vx = vx;
     this.vy = vy;
     this.r = r;
+    color = new RgbColor();
   }
   
   public boolean collidesWith(Ball ball){
@@ -44,6 +46,10 @@ public class Ball {
 
   public void setGravity(boolean value){
     gravity = value;
+  }
+
+  public RgbColor getColor(){
+    return color;
   }
 
   public double getMomentum(){

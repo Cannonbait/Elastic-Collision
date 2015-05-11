@@ -129,13 +129,7 @@ public class Model implements IBouncingBallsModel {
   }
     
   @Override
-	public List<Ellipse2D> getBalls() {
-		List<Ellipse2D> myBalls = new LinkedList<Ellipse2D>();
-    for (Ball ball : balls){
-      double x = ball.getX(), y = ball.getY(), r = ball.getR();
-		  myBalls.add(new Ellipse2D.Double(x - r, y - r, 2 * r, 2 * r));
-      
-    }
-		return myBalls;
+	public List<Ball> getBalls() {
+    return balls;
 	}
 }
